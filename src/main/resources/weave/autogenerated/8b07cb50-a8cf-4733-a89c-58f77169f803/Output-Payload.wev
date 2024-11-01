@@ -1,0 +1,8 @@
+%dw 2.0
+
+type auto_8b07cb50_a8cf_4733_a89c_58f77169f803_Output_Payload = {
+  id: String, 
+  message?: String | Null, 
+  _?: Any
+}
+
