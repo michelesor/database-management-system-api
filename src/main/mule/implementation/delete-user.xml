@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="delete-user-by-id-implementation-flow" doc:id="23313345-09f3-4069-8559-83f205a7d2d3" >
+		<set-variable value="#[attributes.uriParams.'id']" doc:name="id" doc:id="f3a0931b-e419-4513-a5bb-bfdb12088a3d" variableName="id"/>
+		<logger level="INFO" doc:name="Logger" doc:id="b2090173-3c99-4276-8706-027617bb481f" message="#[output application/java&#10;---&#10;&quot;start delete user by id low with id: &quot; ++ attributes.uriParams.'id'  ++ &quot; correlationId: &quot; ++ correlationId]" />
+		<db:delete doc:name="Delete" doc:id="76a37c4e-e86d-476e-9f43-4c39fa5216ce" config-ref="Database_Config">
+			<db:sql ><![CDATA[DELETE FROM users WHERE id = :id;
+]]></db:sql>
+			<db:input-parameters ><![CDATA[#[id : attributes.uriParams.'id']]]></db:input-parameters>
+		</db:delete>
+		<ee:transform doc:name="response" doc:id="4a76dc83-0679-4753-a26a-e12574bb5e17" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	id: vars.id,
+	"message" : "delete"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="d8afdd28-87a3-45e5-a4a3-fd65cb7247be" message='#[output application/java&#10;---&#10;"delete user with id: " ++ vars.id ++ " correlationId: " ++ correlationId]' />
+	</flow>
+</mule>

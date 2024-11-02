@@ -6,7 +6,7 @@
 http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
 	<flow name="create-users-implementation-flow" doc:id="6768509a-3719-4a2b-acef-144ec81639ff" >
-		<logger level="INFO" doc:name="Logger" doc:id="5c74392d-b5cc-489c-b176-6960566edfdb" message='#[output application/java&#10;---&#10;"start create users flow with file name: correlationId: " ++ correlationId]'/>
+		<logger level="INFO" doc:name="Logger" doc:id="5c74392d-b5cc-489c-b176-6960566edfdb" message='#[output application/java&#10;---&#10;"start create users flow with with correlationId: " ++ correlationId]'/>
 		<db:bulk-insert doc:name="Bulk insert user" doc:id="704f2d3c-c011-41bf-8d3c-771adb45b6a0" config-ref="Database_Config">
 			<db:sql><![CDATA[INSERT INTO users (id,nome,cognome,eta,citta,email)
 VALUES (:id,:nome,:cognome,:eta,:citta,:email);

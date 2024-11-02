@@ -7,7 +7,7 @@
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>mule-application</packaging>
 
-	<name>database-management-system-api-local</name>
+	<name>database-management-system-api</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -80,7 +80,7 @@
 		<dependency>
 			<groupId>40df8e2f-dceb-4971-a479-770a862dca2a</groupId>
 			<artifactId>database-management-system</artifactId>
-			<version>1.0.1</version>
+			<version>1.0.3</version>
 			<classifier>raml</classifier>
 			<type>zip</type>
 		</dependency>

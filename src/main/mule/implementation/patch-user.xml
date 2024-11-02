@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="patch-user-implementation-flow" doc:id="7a720090-03bb-41a2-8912-5c51e755e7c4" >
+		<set-variable value="#[output application/json&#10;---&#10;&quot;UPDATE users SET &quot; ++ &#10;(if (!isEmpty(payload.nome)) &quot;nome='&quot; ++ payload.nome ++ &quot;'&quot; else &quot;&quot;) ++&#10;(if (!isEmpty(payload.cognome)) &#10;    (if (!isEmpty(payload.nome)) &quot;, &quot; else &quot;&quot;) ++ &quot;cognome='&quot; ++ payload.cognome ++ &quot;'&quot; &#10;else &quot;&quot;) ++&#10;(if (!isEmpty(payload.eta)) &#10;    (if (!isEmpty(payload.nome) or !isEmpty(payload.cognome)) &quot;, &quot; else &quot;&quot;) ++ &quot;eta=&quot; ++ payload.eta &#10;else &quot;&quot;) ++&#10;(if (!isEmpty(payload.citta)) &#10;    (if (!isEmpty(payload.nome) or !isEmpty(payload.cognome) or !isEmpty(payload.eta)) &quot;, &quot; else &quot;&quot;) ++ &quot;citta='&quot; ++ payload.citta ++ &quot;'&quot; &#10;else &quot;&quot;) ++&#10;(if (!isEmpty(payload.email)) &#10;    (if (!isEmpty(payload.nome) or !isEmpty(payload.cognome) or !isEmpty(payload.eta) or !isEmpty(payload.citta)) &quot;, &quot; else &quot;&quot;) ++ &quot;email='&quot; ++ payload.email ++ &quot;'&quot; &#10;else &quot;&quot;) ++&#10;&quot; WHERE id = &quot; ++ payload.id]" doc:name="query" doc:id="310d981b-4d2b-4102-8d03-4adb0c2cd6f7" variableName="query"/>
+		<logger level="INFO" doc:name="Logger" doc:id="3e6e934b-9aa7-440a-9b14-4fd50be1cd39" message='#[output application/java&#10;---&#10;"start patch user with query:" ++ write(vars.query,"application/json") ++ " correlationId: " ++ correlationId]' />
+		<db:update doc:name="Update users" doc:id="74f68145-e488-42fe-b3e7-4e91c38571de" config-ref="Database_Config" target="updateUser" >
+			<db:sql ><![CDATA[#[vars.query]]]></db:sql>
+		</db:update>
+		<ee:transform doc:name="response" doc:id="7f5b78a9-e987-4330-ab5d-94dc3dc50325" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"id" : payload.id,
+	"message" : "update"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="d13becdd-0d9d-4ed4-8846-5e35529e2542" message='#[output application/java&#10;---&#10;"user with id: " ++ payload.id ++ " updated"]' />
+	</flow>
+</mule>

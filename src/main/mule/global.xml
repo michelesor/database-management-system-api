@@ -9,6 +9,6 @@
     <http:listener-config name="database-management-system-httpListenerConfig">
         <http:listener-connection host="0.0.0.0" port="8082" readTimeout="999999" />
     </http:listener-config>
-    <apikit:config name="database-management-system-config" api="resource::40df8e2f-dceb-4971-a479-770a862dca2a:database-management-system:1.0.1:raml:zip:database-management-system.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <apikit:config name="database-management-system-config" api="resource::40df8e2f-dceb-4971-a479-770a862dca2a:database-management-system:1.0.3:raml:zip:database-management-system.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
     <configuration-properties doc:name="Configuration properties" doc:id="23dd3ce4-a0d0-4cd4-8f75-5ca514569c53" file="properties/config-${mule.env}.yaml" />
 </mule>

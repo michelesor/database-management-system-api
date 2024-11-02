@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="get-users-implementation-flow" doc:id="4c9fa63b-1ec7-4d15-a2e8-47f85b40a762" >
+		<logger level="INFO" doc:name="Logger" doc:id="b633e16e-0bc2-4c41-8701-94ad2d343407" message='#[output application/java&#10;---&#10;"start get user" ++ " correlationId: " ++ correlationId]' />
+		<set-variable doc:name="query" doc:id="bcce24e4-d423-49be-bd50-cf78228f4d89" variableName="query" value="#[output application/json&#10;---&#10;&quot;SELECT * FROM users WHERE id IS NOT NULL&quot; ++ &#10;(if (!isEmpty(attributes.queryParams.nome))&#10;    &quot; AND nome='&quot; ++ (attributes.queryParams.nome default &quot;&quot;) ++ &quot;'&quot;&#10;else &#10;    &quot;&quot;) ++&#10;(if (!isEmpty(attributes.queryParams.cognome))&#10;    &quot; AND cognome='&quot; ++ (attributes.queryParams.cognome default &quot;&quot;) ++ &quot;'&quot;&#10;else &#10;    &quot;&quot;)]"/>
+		<db:select doc:name="Select user by id" doc:id="f72e21d2-46ff-4639-8bbd-0ef6467581c3" config-ref="Database_Config">
+			<db:sql ><![CDATA[#[vars.query]]]></db:sql>
+		</db:select>
+		<ee:transform doc:name="response" doc:id="bb7b80d4-0aaa-4746-aa6d-27710035777b" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="eac27fd3-3a0c-4fd8-a417-7e1ff7cd4993" message='#[output application/java&#10;---&#10;"get users: " ++ write(payload, "application/json") ++ " correlationId: " ++ correlationId]' />
+	</flow>
+</mule>

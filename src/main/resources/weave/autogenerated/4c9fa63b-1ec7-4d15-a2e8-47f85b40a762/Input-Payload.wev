@@ -1,0 +1,5 @@
+%dw 2.0
+
+type auto_4c9fa63b_1ec7_4d15_a2e8_47f85b40a762_Input_Payload = Array<{|  nome: String,   cognome: String,   eta: Number,   citta: String,   email: String|}> {"mediaType": "application/json",
+"encoding": "UTF-8"}
+
